@@ -17,12 +17,16 @@ def getOpt(textOpts="", inputOptText="", rangeList=[], exceptions=[], borrar_pan
             else:
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))
+                if borrar_pantalla:
+                    borrarPantalla()
         except:
             if opc in exceptions:
                 return opc
             else:
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))
+                if borrar_pantalla:
+                    borrarPantalla()
 
 
 def borrarPantalla():
@@ -94,8 +98,7 @@ def newPlayer(dni="", name="", profile="", human=""):
     elif save_player == "n" or save_player == "N":
         return
 
-
-def show_remove_players():
+def show_players():
     borrarPantalla()
     cabecera_show_players = ("*" * 140 + "\n" + "*" * 63 + "Select Players" + "*" * 63 + "\n" + "".ljust(29)
                              + "Boot Players" + "".ljust(29) + "||" + "".ljust(29) + "Human Players" + "".ljust(26)
@@ -134,13 +137,7 @@ def show_remove_players():
         cadena = ""
         if len(human_players) == 0:
             print(cabecera_show_players)
-            remove_player = input("Option ( -id to remove player, -1 to exit):\n".center(140))
-            if remove_player == "-1":
-                break
-            else:
-                print("=" * 63 + "Invalid option" + "=" * 63)
-                input("Press enter to continue".center(140))
-                borrarPantalla()
+            return
         else:
             for player in range(len(human_players)):
                 cadena += "\n" + boot_players[player].ljust(20)
@@ -168,18 +165,134 @@ def show_remove_players():
             borrarPantalla()
             cadena += "\n" * 2 + "*" * 140
             print(cabecera_show_players + cadena)
-            remove_player = input("Option ( -id to remove player, -1 to exit):\n".center(140))
-            if len(remove_player) != 2 and len(remove_player) != 10:
+            return
+
+def remove_players():
+    while True:
+        human_players = []
+        boot_players = []
+        for player in funcions_dades.dades.players.keys():
+            if player not in human_players and funcions_dades.dades.players[player]["human"] == True:
+                human_players.append(player)
+            elif player not in boot_players and funcions_dades.dades.players[player]["human"] == False:
+                boot_players.append(player)
+        show_players()
+        remove_player = input("Option ( -id to remove player, -1 to exit):\n".center(140))
+        if len(remove_player) != 2 and len(remove_player) != 10:
+            print("=" * 63 + "Invalid option" + "=" * 63)
+            input("Press enter to continue".center(140))
+            borrarPantalla()
+        elif remove_player == "-1":
+            break
+        elif remove_player[0] == "-" and remove_player[1:].upper() in funcions_dades.dades.players.keys():
+            funcions_dades.dades.players.pop(remove_player[1:].upper())
+            if remove_player[1:].upper() in human_players:
+                human_players.remove(remove_player[1:].upper())
+            elif remove_player[1:].upper() in boot_players:
+                boot_players.remove(remove_player[1:].upper())
+            borrarPantalla()
+
+def show_setting_players():
+    cabecera_setting_players = ("".ljust(40) + "*" * 19 + "Actual Players In Game" + "*" * 18 + "".rjust(40))
+    if len(funcions_dades.dades.player_game) == 0 or len(funcions_dades.dades.players) == 0:
+        print("\n" * 3 + cabecera_setting_players + "".ljust(57) + "There is no players in game" + "".ljust(57))
+        input("".ljust(61) + "Enter to continue" + "".ljust(62) + "\n")
+        borrarPantalla()
+        return
+    else:
+        while True:
+            cadena_players_game = ""
+            for player in funcions_dades.dades.player_game:
+                perfil_apuestas = ""
+                if funcions_dades.dades.players[player]["human"]:
+                    human_player_game = "Human"
+                else:
+                    human_player_game = "Boot"
+                if funcions_dades.dades.players[player]["type"] == 30:
+                    perfil_apuestas = "Caotiuos"
+                elif funcions_dades.dades.players[player]["type"] == 40:
+                    perfil_apuestas = "Normal"
+                elif funcions_dades.dades.players[player]["type"] == 50:
+                    perfil_apuestas = "Bold"
+                cadena_players_game += "".ljust(43) + str(player).ljust(12) + funcions_dades.dades.players[player]["name"].ljust(20) + \
+                    human_player_game.ljust(10) + perfil_apuestas.ljust(18)
+
+            print("\n"*3 + cabecera_setting_players + cadena_players_game + "\n")
+            input("".ljust(61) + "Enter to continue" + "".ljust(62))
+            borrarPantalla()
+            return
+
+def settings_players():
+    show_setting_players()
+    if len(funcions_dades.dades.player_game) == 0 or len(funcions_dades.dades.players) == 0:
+        while True:
+            show_players()
+            opc = input("".ljust(20) + "Option (id to add to game, -id to remove player, sh to show actual players in game, -1 to go back:")
+            if len(opc) != 2 and len(opc) != 10 and len(opc) != 9:
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))
                 borrarPantalla()
-            elif remove_player == "-1":
+            elif opc == "-1":
                 break
-            elif remove_player[0] == "-" and remove_player[1:].upper() in funcions_dades.dades.players.keys():
-                funcions_dades.dades.players.pop(remove_player[1:].upper())
-                if remove_player[1:].upper() in human_players:
-                    human_players.remove(remove_player[1:].upper())
-                elif remove_player[1:].upper() in boot_players:
-                    boot_players.remove(remove_player[1:].upper())
+            elif opc[0] == "-" and opc[1:].upper() in funcions_dades.dades.player_game.keys():
+                funcions_dades.dades.player_game.pop(opc[1:].upper())
+                show_setting_players()
+            elif opc.upper() in funcions_dades.dades.players.keys():
+                funcions_dades.dades.player_game[opc.upper()] = {""}
+                show_setting_players()
+            elif opc.lower() == "sh":
+                show_setting_players()
+    else:
+        while True:
+            input("\n" + "".ljust(61) + "Enter to continue" + "".ljust(62))
+            borrarPantalla()
+            show_players()
+            opc = input("".ljust(20) + "Option (id to add to game, -id to remove player, sh to show actual players in game, -1 to go back:")
+            if len(opc) != 2 and len(opc) != 10 and len(opc) != 9:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
                 borrarPantalla()
+            elif opc == "-1":
+                break
+            elif opc[0] == "-" and opc[1:].upper() in funcions_dades.dades.player_game.keys():
+                funcions_dades.dades.player_game.pop(opc[1:].upper())
+                borrarPantalla()
+            elif opc.upper() in funcions_dades.dades.players.keys():
+                funcions_dades.dades.player_game[opc.upper()] = {""}
+                print("hola")
+                borrarPantalla()
+            elif opc.lower() == "sh":
+                show_setting_players()
 
+def settings_decks():
+    borrarPantalla()
+    menu_decks = "".ljust(47) + "1) ESP - ESP" + "\n" + "".ljust(47) + "2) POK - POK" + "\n" + "".ljust(47) + "0) Go back"
+    opc = getOpt(menu_decks,"".ljust(47) + "Option: ", [1,2,0], borrar_pantalla=True)
+    if opc == 0:
+        return
+    elif opc == 1:
+        funcions_dades.dades.deckgame = "ESP"
+        print("".ljust(47) + "Established Card Deck ESP, Baraja Española")
+        input("".ljust(47) + "Enter to continue")
+    elif opc == 2:
+        funcions_dades.dades.deckgame = "POK"
+        print("".ljust(47) + "Established Card Deck POK, Poker Deck")
+        input("".ljust(47) + "Enter to continue")
+
+def settings_max_rounds():
+    while True:
+        borrarPantalla()
+        max_rounds = input("".ljust(60) + "Max Rounds: ")
+        try:
+            max_rounds = int(max_rounds)
+            if max_rounds not in range(1,21):
+                print("".ljust(60) + "Max Rounds Has To Be Between 0 and 20")
+                input("".ljust(60) + "Enter to continue")
+            else:
+                funcions_dades.dades.max_rounds = max_rounds
+                print("".ljust(60) + "Established maximum of rounds to {}".format(str(max_rounds)))
+                input("".ljust(60) + "Enter to continue")
+                break
+        except:
+            print("".ljust(60) + "Please, enter only numbers")
+            input("".ljust(60) + "Enter to continue")

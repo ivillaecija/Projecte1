@@ -112,3 +112,25 @@ cartas = {"ESP":{
 }}
 
 players = {}
+
+
+deckgame = ""
+max_rounds = 5
+cardgame = {}
+player_game = {}
+player_game_round = {}
+
+
+# cardgame = {'cardgame_id': id de partida, 'players': Numero de jugadores, 'start_hour':Hora
+# de inicio de artida ( datetime), 'rounds': Número de rondas, 'end_hour': hora final de partida
+# (datetime)}
+#
+# player_game = {id_game:{id_player_1:{initial_card_id:”card id”, starting_points:”puntos al
+# inicio”, ending_points:”puntos al final de partida},...,id_player_n:{initial_card_id:”card id”,
+# starting_points:”puntos al inicio”, ending_points:”puntos al final de partida}}”
+# player_game_round = {round:{id_player_1:{is_bank:”0 ó 1”,bet_points:”apuesta en la
+# ronda”,starting_round_points:”puntos al inicio de la partida,cards_value:”puntos obtenido en
+# la actual ronda”,endind_round_points:”puntos al final de la ronda”},...,{id_player_n:
+# {is_bank:”0 ó 1”,bet_points:”apuesta en la ronda”,starting_round_points:”puntos al inicio de la
+# partida,cards_value:”puntos obtenido en la actual ronda”,endind_round_points:”puntos al
+# final de la ronda”}

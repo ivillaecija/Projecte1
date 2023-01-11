@@ -17,6 +17,7 @@ flg_00 = True
 flg_01 = False
 flg_02 = False
 flg_03 = False
+flg_032 = False
 flg_04 = False
 flg_05 = False
 salir = False
@@ -24,7 +25,7 @@ salir = False
 while not salir:
     while flg_00:
         funcions.borrarPantalla()
-        opc = funcions.getOpt(menu00, "".ljust(55) + "Option: ", [1,2,3,4,5,6])
+        opc = funcions.getOpt(menu00, "".ljust(55) + "Option: ", [1,2,3,4,5,6], borrar_pantalla=True)
         if opc == 1:
             flg_00 = False
             flg_01 = True
@@ -45,36 +46,49 @@ while not salir:
             salir = True
     while flg_01:
         funcions.borrarPantalla()
-        opc = funcions.getOpt(menu01, "".ljust(55) + "Option: ", [1,2,3,4])
+        opc = funcions.getOpt(menu01, "".ljust(55) + "Option: ", [1,2,3,4], borrar_pantalla=True)
         if opc == 1:
             newplayer = funcions.newPlayer(human=True)
         elif opc == 2:
             newplayer = funcions.newPlayer(human=False)
         elif opc == 3:
-            remove_player = funcions.show_remove_players()
+            remove_player = funcions.remove_players()
         elif opc == 4:
             flg_01 = False
             flg_00 = True
     while flg_02:
         funcions.borrarPantalla()
-        opc = funcions.getOpt(menu02, "".ljust(55) + "Option: ", [1, 2, 3, 4])
+        opc = funcions.getOpt(menu02, "".ljust(55) + "Option: ", [1, 2, 3, 4], borrar_pantalla=True)
         if opc == 1:
-            print()
+            setting_players = funcions.settings_players()
         elif opc == 2:
-            print()
+            setting_decks = funcions.settings_decks()
         elif opc == 3:
-            print()
+            setting_rounds = funcions.settings_max_rounds()
         elif opc == 4:
             flg_02 = False
             flg_00 = True
     while flg_03:
-        funcions.borrarPantalla()
-        input()
-        flg_03 = False
-        flg_00 = True
+        if len(funcions_dades.dades.player_game) < 2 or len(funcions_dades.dades.players) < 2:
+            print("".ljust(55) + "Set the players that compose the game first")
+            input("".ljust(55) + "Enter to continue")
+            funcions.borrarPantalla()
+            flg_03 = False
+            flg_00 = True
+        elif funcions_dades.dades.deckgame == "":
+            print("".ljust(55) + "Set the deck of cards first")
+            input("".ljust(55) + "Enter to continue")
+            funcions.borrarPantalla()
+            flg_03 = False
+            flg_00 = True
+        else:
+            flg_03 = False
+            flg_032 = True
+            while flg_032:
+                print()
     while flg_04:
         funcions.borrarPantalla()
-        opc = funcions.getOpt(menu04, "".ljust(55) + "Option: ", [1, 2, 3, 4])
+        opc = funcions.getOpt(menu04, "".ljust(55) + "Option: ", [1, 2, 3, 4], borrar_pantalla=True)
         if opc == 1:
             print()
         elif opc == 2:
@@ -86,7 +100,7 @@ while not salir:
             flg_00 = True
     while flg_05:
         funcions.borrarPantalla()
-        opc = funcions.getOpt(menu05, "".ljust(42) + "Option: ", [1,2,3,4,5,6,7,8,9,10,11])
+        opc = funcions.getOpt(menu05, "".ljust(42) + "Option: ", [1,2,3,4,5,6,7,8,9,10,11], borrar_pantalla=True)
         if opc == 1:
             print()
         elif opc == 2:

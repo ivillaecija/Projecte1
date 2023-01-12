@@ -120,7 +120,6 @@ cardgame = {}
 player_game = {}
 player_game_round = {}
 
-
 # cardgame = {'cardgame_id': id de partida, 'players': Numero de jugadores, 'start_hour':Hora
 # de inicio de artida ( datetime), 'rounds': Número de rondas, 'end_hour': hora final de partida
 # (datetime)}

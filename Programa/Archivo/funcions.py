@@ -4,7 +4,7 @@ import funcions_dades.dades
 import os
 
 
-def getOpt(textOpts="", inputOptText="", rangeList=[], exceptions=[], borrar_pantalla = "no"):  # 1)
+def getOpt(textOpts="", inputOptText="", rangeList=[], exceptions=[], borrar_pantalla="no"):  # 1)
     while True:
         print(textOpts)
         opc = input(inputOptText)
@@ -66,13 +66,14 @@ def newPlayer(dni="", name="", profile="", human=""):
                 break
     elif human == False:
         borrarPantalla()
-        nif = str(random.randint(1,9))
+        nif = str(random.randint(1, 9))
         for i in range(1, 8):
             nif += str(random.randint(1, 9))
         letra = funcions_dades.dades.letrasDni[int(nif) % 23]
         nif = nif + letra
     while True:
-        cadena = ("".ljust(38) + "Name:".ljust(10) + name.rjust(20) + "\n" + "".ljust(38) + "DNI:".ljust(10) + nif.rjust(20) + "\n")
+        cadena = ("".ljust(38) + "Name:".ljust(10) + name.rjust(20) + "\n" + "".ljust(38) + "DNI:".ljust(
+            10) + nif.rjust(20) + "\n")
         opc = getOpt("\n" + cadena + "\n" + menu_profile, "".ljust(38) + "Option: ", [1, 2, 3])
         if opc == 1:
             valor_apuestas = 30
@@ -87,8 +88,9 @@ def newPlayer(dni="", name="", profile="", human=""):
             perfil_apuestas = "Bold"
             break
     cadena_new_player = ("\n" +
-            "".ljust(38) + "Name:".ljust(10) + name.rjust(20) + "\n" + "".ljust(38) + "DNI:".ljust(10) + nif.rjust(20)
-            + "\n" + "".ljust(38) + "Profile:".ljust(10) + perfil_apuestas.rjust(20) + "\n")
+                         "".ljust(38) + "Name:".ljust(10) + name.rjust(20) + "\n" + "".ljust(38) + "DNI:".ljust(
+                10) + nif.rjust(20)
+                         + "\n" + "".ljust(38) + "Profile:".ljust(10) + perfil_apuestas.rjust(20) + "\n")
     borrarPantalla()
     save_player = getOpt(cadena_new_player, "".ljust(38) + "Is ok ? Y/n: ", [], ["Y", "y", "N", "n"])
     if save_player == "y" or save_player == "Y":
@@ -97,6 +99,7 @@ def newPlayer(dni="", name="", profile="", human=""):
                                                      "cards": [], "roundPoints": 0}
     elif save_player == "n" or save_player == "N":
         return
+
 
 def show_players():
     borrarPantalla()
@@ -114,17 +117,17 @@ def show_players():
 
     for pasadas in range(len(human_players) - 1):
         for player in range(len(human_players) - 1 - pasadas):
-            if human_players[player] > human_players[player+1]:
+            if human_players[player] > human_players[player + 1]:
                 aux = human_players[player]
-                human_players[player] = human_players[player+1]
-                human_players[player+1] = aux
+                human_players[player] = human_players[player + 1]
+                human_players[player + 1] = aux
 
     for pasadas in range(len(boot_players) - 1):
         for player in range(len(boot_players) - 1 - pasadas):
-            if boot_players[player] > boot_players[player+1]:
+            if boot_players[player] > boot_players[player + 1]:
                 aux = boot_players[player]
-                boot_players[player] = boot_players[player+1]
-                boot_players[player+1] = aux
+                boot_players[player] = boot_players[player + 1]
+                boot_players[player + 1] = aux
     while True:
         while True:
             if len(human_players) > len(boot_players):
@@ -167,6 +170,7 @@ def show_players():
             print(cabecera_show_players + cadena)
             return
 
+
 def remove_players():
     while True:
         human_players = []
@@ -192,11 +196,12 @@ def remove_players():
                 boot_players.remove(remove_player[1:].upper())
             borrarPantalla()
 
+
 def show_setting_players():
     cabecera_setting_players = ("".ljust(40) + "*" * 19 + "Actual Players In Game" + "*" * 18 + "".rjust(40))
     if len(funcions_dades.dades.player_game) == 0 or len(funcions_dades.dades.players) == 0:
         print("\n" * 3 + cabecera_setting_players + "".ljust(57) + "There is no players in game" + "".ljust(57))
-        input("".ljust(61) + "Enter to continue" + "".ljust(62) + "\n")
+        input("".ljust(61) + "Enter to continue" + "\n")
         borrarPantalla()
         return
     else:
@@ -214,20 +219,22 @@ def show_setting_players():
                     perfil_apuestas = "Normal"
                 elif funcions_dades.dades.players[player]["type"] == 50:
                     perfil_apuestas = "Bold"
-                cadena_players_game += "".ljust(43) + str(player).ljust(12) + funcions_dades.dades.players[player]["name"].ljust(20) + \
-                    human_player_game.ljust(10) + perfil_apuestas.ljust(18)
+                cadena_players_game += "\n" + "".ljust(40) + str(player).ljust(12) + funcions_dades.dades.players[player][
+                        "name"].ljust(20) + human_player_game.ljust(10) + perfil_apuestas.ljust(18)
 
-            print("\n"*3 + cabecera_setting_players + cadena_players_game + "\n")
+            print("\n" * 3 + cabecera_setting_players + cadena_players_game + "\n")
             input("".ljust(61) + "Enter to continue" + "".ljust(62))
             borrarPantalla()
             return
+
 
 def settings_players():
     show_setting_players()
     if len(funcions_dades.dades.player_game) == 0 or len(funcions_dades.dades.players) == 0:
         while True:
             show_players()
-            opc = input("".ljust(20) + "Option (id to add to game, -id to remove player, sh to show actual players in game, -1 to go back:")
+            opc = input("".ljust(
+                20) + "Option (id to add to game, -id to remove player, sh to show actual players in game, -1 to go back:")
             if len(opc) != 2 and len(opc) != 10 and len(opc) != 9:
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))
@@ -238,16 +245,24 @@ def settings_players():
                 funcions_dades.dades.player_game.pop(opc[1:].upper())
                 show_setting_players()
             elif opc.upper() in funcions_dades.dades.players.keys():
-                funcions_dades.dades.player_game[opc.upper()] = {""}
-                show_setting_players()
+                if len(funcions_dades.dades.player_game) >= 6:
+                    print()
+                    print("Maxim number of players in game reached!!".center(140))
+                    show_setting_players()
+                else:
+                    funcions_dades.dades.player_game[opc.upper()] = {""}
+                    show_setting_players()
             elif opc.lower() == "sh":
                 show_setting_players()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
     else:
         while True:
-            input("\n" + "".ljust(61) + "Enter to continue" + "".ljust(62))
-            borrarPantalla()
             show_players()
-            opc = input("".ljust(20) + "Option (id to add to game, -id to remove player, sh to show actual players in game, -1 to go back:")
+            opc = input("".ljust(
+                20) + "Option (id to add to game, -id to remove player, sh to show actual players in game, -1 to go back:")
             if len(opc) != 2 and len(opc) != 10 and len(opc) != 9:
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))
@@ -264,10 +279,12 @@ def settings_players():
             elif opc.lower() == "sh":
                 show_setting_players()
 
+
 def settings_decks():
     borrarPantalla()
-    menu_decks = "".ljust(47) + "1) ESP - ESP" + "\n" + "".ljust(47) + "2) POK - POK" + "\n" + "".ljust(47) + "0) Go back"
-    opc = getOpt(menu_decks,"".ljust(47) + "Option: ", [1,2,0], borrar_pantalla=True)
+    menu_decks = "".ljust(47) + "1) ESP - ESP" + "\n" + "".ljust(47) + "2) POK - POK" + "\n" + "".ljust(
+        47) + "0) Go back"
+    opc = getOpt(menu_decks, "".ljust(47) + "Option: ", [1, 2, 0], borrar_pantalla=True)
     if opc == 0:
         return
     elif opc == 1:
@@ -279,13 +296,14 @@ def settings_decks():
         print("".ljust(47) + "Established Card Deck POK, Poker Deck")
         input("".ljust(47) + "Enter to continue")
 
+
 def settings_max_rounds():
     while True:
         borrarPantalla()
         max_rounds = input("".ljust(60) + "Max Rounds: ")
         try:
             max_rounds = int(max_rounds)
-            if max_rounds not in range(1,21):
+            if max_rounds not in range(1, 21):
                 print("".ljust(60) + "Max Rounds Has To Be Between 0 and 20")
                 input("".ljust(60) + "Enter to continue")
             else:

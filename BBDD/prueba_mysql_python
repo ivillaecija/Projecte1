@@ -1,0 +1,54 @@
+import mysql.connector
+
+# ALT + F12
+# py -m pip install mysql-connector-python
+
+def bbdd_update_barajas():
+    barajas = {}
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("select * from deck")
+    baraja = cursor.fetchone()
+    while baraja:
+        barajas[baraja[0]] = ""
+        baraja = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return barajas
+
+bbdd_update_barajas()
+
+def bbdd_update_cards():
+    barajas = bbdd_update_barajas()
+    cards_ESP = {}
+    cards_POK = {}
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("select * from card order by card_id, card_priority desc")
+    card = cursor.fetchone()
+    while card:
+        for baraja in barajas.keys():
+            if card[5] == "ESP":
+                if card[2] <= 7:
+                    cards_ESP[card[0]] = {"literal": card[1], "value": card[2], "priority": card[3], "realValue": card[4]}
+                    card = cursor.fetchone()
+                else:
+                    cards_ESP[card[0]] = {"no literal": card[1], "value": card[2], "priority": card[3], "realValue": card[4]}
+                    card = cursor.fetchone()
+            elif card[5] == "POK":
+                if card[2] <= 7:
+                    cards_POK[card[0]] = {"literal": card[1], "value": card[2], "priority": card[3], "realValue": card[4]}
+                    card = cursor.fetchone()
+                else:
+                    cards_POK[card[0]] = {"no literal": card[1], "value": card[2], "priority": card[3], "realValue": card[4]}
+                    card = cursor.fetchone()
+    barajas["ESP"] = cards_ESP
+    barajas["POK"] = cards_POK
+    cards_ESP = {}
+    cards_POK = {}
+    print(barajas)
+    cursor.close()
+    conexion.close()
+    return barajas
+
+bbdd_update_cards()

@@ -10,6 +10,7 @@ create table player (
     player_risk tinyint,
     human tinyint(1))
 ;
+
 create table deck (
 	deck_id char(3) primary key,
     deck_name varchar(25))
@@ -183,3 +184,9 @@ insert into card values ('T10', 'Diez de Treboles', 10, 1, 0.5, 'POK');
 insert into card values ('T11', 'Jota de Treboles', 11, 1, 0.5, 'POK');	
 insert into card values ('T12', 'Reina de Treboles', 12, 1, 0.5, 'POK');
 insert into card values ('T13', 'Rey de Treboles', 13, 1, 0.5, 'POK');
+
+-- TABLA PLAYER
+insert into player values ('12312313K', 'Humano1', 50, true);
+insert into player values ('44444444A', 'Boot1', 40, false);
+insert into player values ('34343434H', 'Humano2', 30, true);
+insert into player values ('45129508N', 'Boot2', 50, false);

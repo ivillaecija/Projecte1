@@ -1,7 +1,7 @@
 import random
-
 import funcions_dades.dades
 import os
+import mysql.connector
 
 
 def getOpt(textOpts="", inputOptText="", rangeList=[], exceptions=[], borrar_pantalla="no"):  # 1)
@@ -37,6 +37,8 @@ def borrarPantalla():
 
 
 def newPlayer(dni="", name="", profile="", human=""):
+    funcions_dades.dades.players = {}
+    charge_bbdd_players()
     menu_profile = "".ljust(38) + "Select your Profile:" + "\n" + "".ljust(38) + "1)Cautious" + "\n" + "".ljust(
         38) + "2)Moderated" + "\n" + "".ljust(38) + "3)Bold"
     while True:
@@ -94,14 +96,15 @@ def newPlayer(dni="", name="", profile="", human=""):
     borrarPantalla()
     save_player = getOpt(cadena_new_player, "".ljust(38) + "Is ok ? Y/n: ", [], ["Y", "y", "N", "n"])
     if save_player == "y" or save_player == "Y":
-        funcions_dades.dades.players[nif.upper()] = {"name": name, "human": human, "bank": False, "initialCard": "",
-                                                     "priority": 0, "type": valor_apuestas, "bet": 4, "points": 0,
-                                                     "cards": [], "roundPoints": 0}
+        new_bbdd_player(nif, name, valor_apuestas, human)
+        return
     elif save_player == "n" or save_player == "N":
         return
 
 
 def show_players():
+    funcions_dades.dades.players = {}
+    charge_bbdd_players()
     borrarPantalla()
     cabecera_show_players = ("*" * 140 + "\n" + "*" * 63 + "Select Players" + "*" * 63 + "\n" + "".ljust(29)
                              + "Boot Players" + "".ljust(29) + "||" + "".ljust(29) + "Human Players" + "".ljust(26)
@@ -172,6 +175,8 @@ def show_players():
 
 
 def remove_players():
+    funcions_dades.dades.players = {}
+    charge_bbdd_players()
     while True:
         human_players = []
         boot_players = []
@@ -189,18 +194,12 @@ def remove_players():
         elif remove_player == "-1":
             break
         elif remove_player[0] == "-" and remove_player[1:].upper() in funcions_dades.dades.players.keys():
-            funcions_dades.dades.players.pop(remove_player[1:].upper())
-            if remove_player[1:].upper() in human_players:
-                human_players.remove(remove_player[1:].upper())
-            elif remove_player[1:].upper() in boot_players:
-                boot_players.remove(remove_player[1:].upper())
-            borrarPantalla()
-
+            remove_bbdd_player(nif=remove_player[1:].upper())
 
 def show_setting_players():
     cabecera_setting_players = ("".ljust(40) + "*" * 19 + "Actual Players In Game" + "*" * 18 + "".rjust(40))
     if len(funcions_dades.dades.player_game) == 0 or len(funcions_dades.dades.players) == 0:
-        print("\n" * 3 + cabecera_setting_players + "".ljust(57) + "There is no players in game" + "".ljust(57))
+        print("\n" * 3 + cabecera_setting_players + "\n" + "".ljust(57) + "There is no players in game" + "".ljust(57))
         input("".ljust(61) + "Enter to continue" + "\n")
         borrarPantalla()
         return
@@ -314,3 +313,39 @@ def settings_max_rounds():
         except:
             print("".ljust(60) + "Please, enter only numbers")
             input("".ljust(60) + "Enter to continue")
+
+def charge_bbdd_players():
+    funcions_dades.dades.players = {}
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("select * from player")
+    player = cursor.fetchone()
+    while player:
+        if player[3] == 0:
+            funcions_dades.dades.players[player[0]] = {"name": player[1], "human": False, "type": player[2], "bet": 4, "points": 0, "cards": [], "roundPoints": 0}
+            player = cursor.fetchone()
+        elif player[3] == 1:
+            funcions_dades.dades.players[player[0]] = {"name": player[1], "human": True, "type": player[2], "bet": 4, "points": 0, "cards": [], "roundPoints": 0}
+            player = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return
+
+def new_bbdd_player(nif, name, valor_apuestas, human):
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("insert into player values ('{}', '{}', {}, {});".format(nif.upper(), name, valor_apuestas, human))
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+    return
+
+def remove_bbdd_player(nif):
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("delete from player where player_id like '{}';".format(nif))
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+    return
+

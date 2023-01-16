@@ -90,11 +90,11 @@ while not salir:
         funcions.borrarPantalla()
         opc = funcions.getOpt(menu04, "".ljust(55) + "Option: ", [1, 2, 3, 4], borrar_pantalla=True)
         if opc == 1:
-            print()
+            funcions.rankings_more_earnings()
         elif opc == 2:
-            print()
+            funcions.rankings_more_games()
         elif opc == 3:
-            print()
+            funcions.rankings_more_minutes()
         elif opc == 4:
             flg_04 = False
             flg_00 = True

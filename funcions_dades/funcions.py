@@ -254,5 +254,4 @@ def orderCard(id_player,auto=False):
             print(player_cards_value)
 
 
-shuffle()
-orderCard("11115555A", auto=True)
+

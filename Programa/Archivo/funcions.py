@@ -3,7 +3,6 @@ import funcions_dades.dades
 import os
 import mysql.connector
 
-
 def getOpt(textOpts="", inputOptText="", rangeList=[], exceptions=[], borrar_pantalla="no"):  # 1)
     while True:
         print(textOpts)
@@ -349,3 +348,262 @@ def remove_bbdd_player(nif):
     conexion.close()
     return
 
+def crear_listas_10_players():
+    numero_dict = 10
+    numero_partir = 0
+    lista = []
+    for player in funcions_dades.dades.tabla_rankings.keys():
+        if numero_partir == numero_dict and str(numero_dict) not in funcions_dades.dades.tabla_partida:
+            funcions_dades.dades.tabla_partida[str(numero_dict)] = lista
+            numero_dict += 10
+            lista = []
+            lista.append(player)
+        elif numero_partir == numero_dict:
+            funcions_dades.dades.tabla_partida[str(numero_dict)] = lista
+            numero_dict += 10
+            lista = []
+            lista.append(player)
+        else:
+            lista.append(player)
+            numero_partir += 1
+            funcions_dades.dades.tabla_partida[str(numero_dict)] = lista
+    funcions_dades.dades.tabla_partida[str(numero_dict + 10)] = ""
+    return numero_dict
+
+def show_rankings_more_earnings():
+    lista_rankings = []
+    borrarPantalla()
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("select * from tabla_ranking")
+    player = cursor.fetchone()
+    while player:
+        funcions_dades.dades.tabla_rankings[player[0]] = {"name": player[1], "earnings": int(player[2]), "games": int(player[3]), "minutes": float(player[4])}
+        player = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    cadena = ""
+    for player in funcions_dades.dades.tabla_rankings.keys():
+        lista_rankings.append(player)
+
+    for pasadas in range(len(lista_rankings) - 1):
+        for player in range(len(lista_rankings) - 1 - pasadas):
+            if int(funcions_dades.dades.tabla_rankings[lista_rankings[player]]["earnings"]) < int(funcions_dades.dades.tabla_rankings[lista_rankings[player + 1]]["earnings"]):
+                aux = funcions_dades.dades.tabla_rankings[lista_rankings[player]]
+                funcions_dades.dades.tabla_rankings[lista_rankings[player]] = funcions_dades.dades.tabla_rankings[lista_rankings[player + 1]]
+                funcions_dades.dades.tabla_rankings[lista_rankings[player + 1]] = aux
+    numero_dict = crear_listas_10_players()
+    return numero_dict
+
+def show_rankings_more_games():
+    lista_rankings = []
+    borrarPantalla()
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1',
+                                       port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("select * from tabla_ranking")
+    player = cursor.fetchone()
+    while player:
+        funcions_dades.dades.tabla_rankings[player[0]] = {"name": player[1], "earnings": int(player[2]),
+                                                          "games": int(player[3]), "minutes": float(player[4])}
+        player = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    cadena = ""
+    for player in funcions_dades.dades.tabla_rankings.keys():
+        lista_rankings.append(player)
+
+    for pasadas in range(len(lista_rankings) - 1):
+        for player in range(len(lista_rankings) - 1 - pasadas):
+            if int(funcions_dades.dades.tabla_rankings[lista_rankings[player]]["games"]) < int(
+                    funcions_dades.dades.tabla_rankings[lista_rankings[player + 1]]["games"]):
+                aux = funcions_dades.dades.tabla_rankings[lista_rankings[player]]
+                funcions_dades.dades.tabla_rankings[lista_rankings[player]] = funcions_dades.dades.tabla_rankings[
+                    lista_rankings[player + 1]]
+                funcions_dades.dades.tabla_rankings[lista_rankings[player + 1]] = aux
+    numero_dict = crear_listas_10_players()
+    return numero_dict
+
+def show_rankings_more_minutes():
+    lista_rankings = []
+    borrarPantalla()
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1',
+                                       port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("select * from tabla_ranking")
+    player = cursor.fetchone()
+    while player:
+        funcions_dades.dades.tabla_rankings[player[0]] = {"name": player[1], "earnings": int(player[2]),
+                                                          "games": int(player[3]), "minutes": float(player[4])}
+        player = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    cadena = ""
+    for player in funcions_dades.dades.tabla_rankings.keys():
+        lista_rankings.append(player)
+
+    for pasadas in range(len(lista_rankings) - 1):
+        for player in range(len(lista_rankings) - 1 - pasadas):
+            if int(funcions_dades.dades.tabla_rankings[lista_rankings[player]]["games"]) < int(
+                    funcions_dades.dades.tabla_rankings[lista_rankings[player + 1]]["games"]):
+                aux = funcions_dades.dades.tabla_rankings[lista_rankings[player]]
+                funcions_dades.dades.tabla_rankings[lista_rankings[player]] = funcions_dades.dades.tabla_rankings[
+                    lista_rankings[player + 1]]
+                funcions_dades.dades.tabla_rankings[lista_rankings[player + 1]] = aux
+    numero_dict = crear_listas_10_players()
+    return numero_dict
+
+def rankings_more_earnings():
+    numero_dict = show_rankings_more_earnings()
+    borrarPantalla()
+    numero_cadena = 10
+    while True:
+        cadena = ""
+        for player in funcions_dades.dades.tabla_partida[str(numero_cadena)]:
+            cadena += "\n" + "".ljust(34) + player.ljust(12) + funcions_dades.dades.tabla_rankings[player][
+                "name"].ljust(22) + \
+                      str(funcions_dades.dades.tabla_rankings[player]["earnings"]).rjust(8) + str(
+                funcions_dades.dades.tabla_rankings[player]["games"]).rjust(14) + \
+                      str(funcions_dades.dades.tabla_rankings[player]["minutes"]).rjust(16)
+        cadena = (funcions_dades.dades.cabecera_rankings + cadena)
+        print(cadena)
+        if numero_cadena == 10:
+            opc = input("\n" + "".ljust(34) + "(+ to repage, exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "+":
+                numero_cadena += 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+        elif numero_cadena == numero_dict:
+            opc = input("\n" + "".ljust(34) + "(- to repage, exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "-":
+                numero_cadena -= 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+        else:
+            opc = input("\n" + "".ljust(34) + "(+ to repage, - to repage , exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "+":
+                numero_cadena += 10
+                borrarPantalla()
+            elif opc == "-":
+                numero_cadena -= 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+
+def rankings_more_games():
+    numero_dict = show_rankings_more_games()
+    borrarPantalla()
+    numero_cadena = 10
+    while True:
+        cadena = ""
+        for player in funcions_dades.dades.tabla_partida[str(numero_cadena)]:
+            cadena += "\n" + "".ljust(34) + player.ljust(12) + funcions_dades.dades.tabla_rankings[player][
+                "name"].ljust(22) + \
+                      str(funcions_dades.dades.tabla_rankings[player]["earnings"]).rjust(8) + str(
+                funcions_dades.dades.tabla_rankings[player]["games"]).rjust(14) + \
+                      str(funcions_dades.dades.tabla_rankings[player]["minutes"]).rjust(16)
+        cadena = (funcions_dades.dades.cabecera_rankings + cadena)
+        print(cadena)
+        if numero_cadena == 10:
+            opc = input("\n" + "".ljust(34) + "(+ to repage, exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "+":
+                numero_cadena += 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+        elif numero_cadena == numero_dict:
+            opc = input("\n" + "".ljust(34) + "(- to repage, exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "-":
+                numero_cadena -= 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+        else:
+            opc = input("\n" + "".ljust(34) + "(+ to repage, - to repage , exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "+":
+                numero_cadena += 10
+                borrarPantalla()
+            elif opc == "-":
+                numero_cadena -= 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+
+rankings_more_games()
+
+def rankings_more_minutes():
+    numero_dict = show_rankings_more_minutes()
+    borrarPantalla()
+    numero_cadena = 10
+    while True:
+        cadena = ""
+        for player in funcions_dades.dades.tabla_partida[str(numero_cadena)]:
+            cadena += "\n" + "".ljust(34) + player.ljust(12) + funcions_dades.dades.tabla_rankings[player][
+                "name"].ljust(22) + \
+                      str(funcions_dades.dades.tabla_rankings[player]["earnings"]).rjust(8) + str(
+                funcions_dades.dades.tabla_rankings[player]["games"]).rjust(14) + \
+                      str(funcions_dades.dades.tabla_rankings[player]["minutes"]).rjust(16)
+        cadena = (funcions_dades.dades.cabecera_rankings + cadena)
+        print(cadena)
+        if numero_cadena == 10:
+            opc = input("\n" + "".ljust(34) + "(+ to repage, exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "+":
+                numero_cadena += 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+        elif numero_cadena == numero_dict:
+            opc = input("\n" + "".ljust(34) + "(- to repage, exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "-":
+                numero_cadena -= 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()
+        else:
+            opc = input("\n" + "".ljust(34) + "(+ to repage, - to repage , exit to go back): ")
+            if opc.lower() == "exit":
+                break
+            elif opc == "+":
+                numero_cadena += 10
+                borrarPantalla()
+            elif opc == "-":
+                numero_cadena -= 10
+                borrarPantalla()
+            else:
+                print("=" * 63 + "Invalid option" + "=" * 63)
+                input("Press enter to continue".center(140))
+                borrarPantalla()

@@ -120,16 +120,32 @@ cardgame = {}
 player_game = {}
 player_game_round = {}
 
-# cardgame = {'cardgame_id': id de partida, 'players': Numero de jugadores, 'start_hour':Hora
-# de inicio de artida ( datetime), 'rounds': Número de rondas, 'end_hour': hora final de partida
-# (datetime)}
-#
-# player_game = {id_game:{id_player_1:{initial_card_id:”card id”, starting_points:”puntos al
-# inicio”, ending_points:”puntos al final de partida},...,id_player_n:{initial_card_id:”card id”,
-# starting_points:”puntos al inicio”, ending_points:”puntos al final de partida}}”
-# player_game_round = {round:{id_player_1:{is_bank:”0 ó 1”,bet_points:”apuesta en la
-# ronda”,starting_round_points:”puntos al inicio de la partida,cards_value:”puntos obtenido en
-# la actual ronda”,endind_round_points:”puntos al final de la ronda”},...,{id_player_n:
-# {is_bank:”0 ó 1”,bet_points:”apuesta en la ronda”,starting_round_points:”puntos al inicio de la
-# partida,cards_value:”puntos obtenido en la actual ronda”,endind_round_points:”puntos al
-# final de la ronda”}
+cabecera_rankings = "".ljust(34) + "*"*72 + "\n" + "".ljust(34) + "Player ID".ljust(12) + "Name".ljust(22) + "Earnings".ljust(10) + \
+                    "Games Played".ljust(14) + "Minutes Played" + "\n" + "".ljust(34) + "*"*72
+
+tabla_rankings = {"001": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "002": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "003": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "004": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "005": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "006": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "007": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "008": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "009": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "010": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "011": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "012": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "013": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "014": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "015": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "016": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "017": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "018": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "019": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "020": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "021": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "022": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
+                  "023": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123}
+                  }
+
+tabla_partida = {"10": []}

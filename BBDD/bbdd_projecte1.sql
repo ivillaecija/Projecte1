@@ -185,8 +185,52 @@ insert into card values ('T11', 'Jota de Treboles', 11, 1, 0.5, 'POK');
 insert into card values ('T12', 'Reina de Treboles', 12, 1, 0.5, 'POK');
 insert into card values ('T13', 'Rey de Treboles', 13, 1, 0.5, 'POK');
 
--- TABLA PLAYER
+
+-- DATOS DE EJEMPLO
 insert into player values ('12312313K', 'Humano1', 50, true);
 insert into player values ('44444444A', 'Boot1', 40, false);
 insert into player values ('34343434H', 'Humano2', 30, true);
 insert into player values ('45129508N', 'Boot2', 50, false);
+insert into cardgame values (001, 3, 1, '2022-01-16 16:00:00', '2022-01-16 20:00:00', 'ESP');
+insert into cardgame values (002, 2, 2, '2022-01-16 16:00:00', '2022-01-16 20:00:00', 'ESP');
+insert into player_game values (001, '12312313K', '001', 20, 11);
+insert into player_game values (002, '12312313K', '005', 20, 11);
+insert into player_game values (001, '44444444A', '002', 20, 15);
+insert into player_game values (002, '44444444A', '003', 20, 50);
+insert into player_game values (001, '34343434H', '004', 20, 30);
+insert into player_game_round values (001, 1, '12312313K', False, 5, 6, 20, 25);
+insert into player_game_round values (001, 1, '44444444A', True, 0, 5.5, 20, 20);
+insert into player_game_round values (001, 1, '34343434H', False, 5, 5, 20, 15);
+insert into player_game_round values (002, 1, '12312313K', False, 5, 7.5, 20, 30);
+insert into player_game_round values (002, 1, '44444444A', True, 0, 7, 20, 10);
+insert into player_game_round values (002, 2, '12312313K', True, 0, 8, 30, 25);
+insert into player_game_round values (002, 2, '44444444A', False, 0, 6, 10, 15);
+
+-- VISTA PARA MOSTRAR LA TABLA DE RANKINGS
+-- VISTA PARA FACILITAR LA CREACION DE LA TABLA FINAL DE RANKINGS
+-- 1) VISTA PARA MOSTRAR LOS EARNINGS DE CADA JUGADOR EN CADA PARTIDA
+create view player_earning_game as select distinct pg.player_id, pg.cardgame_id, (pg.ending_points - pg.starting_points) as earnings
+from player_game pg
+join player_game_round pgr on pg.player_id=pgr.player_id;
+
+-- 2) VISTA PARA MOSTRAR LOS EARNINGS DE CADA JUGADOR
+create view player_earnings as select distinct pg.player_id, 
+(select sum(earnings) from player_earning_game where player_id=pg.player_id) as earnings
+from player_earning_game pg;
+
+-- 3) VISTA PARA MOSTRAR LOS MINUTOS DE CADA JUGADOR EN CADA PARTIDA
+create view minutos_player_game as select pg.player_id, c.cardgame_id, TIMESTAMPDIFF(MINUTE,c.start_hour,c.end_hour) as minutos 
+from cardgame c join player_game pg on c.cardgame_id=pg.cardgame_id
+
+-- 4) VISTA PARA MOSTRAR LOS MINUTOS TOTALES DE CADA JUGADOR
+create view player_minutes as select p.player_id, coalesce(null, (select sum(minutos) from minutos_player_game m 
+where m.player_id=p.player_id), 0) as minutos from player p;
+
+-- VISTA FINAL DE LA TABLA DE RANKINGS
+create view tabla_ranking as select p.player_id, p.player_name, coalesce(null, e.earnings, 0) as earnings, 
+(select count(*) from player_game where player_id=p.player_id) as games_played, m.minutos as minutes
+from player p left join player_earnings e on e.player_id=p.player_id
+join player_minutes m on m.player_id=p.player_id;
+
+
+

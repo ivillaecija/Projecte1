@@ -347,6 +347,7 @@ def remove_bbdd_player(nif):
     return
 
 def crear_listas_10_players():
+    funcions_dades.dades.tabla_partida = {}
     numero_dict = 10
     lista = []
     for player in funcions_dades.dades.tabla_rankings.keys():

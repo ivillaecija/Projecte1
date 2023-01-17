@@ -123,29 +123,6 @@ player_game_round = {}
 cabecera_rankings = "".ljust(34) + "*"*72 + "\n" + "".ljust(34) + "Player ID".ljust(12) + "Name".ljust(22) + "Earnings".ljust(10) + \
                     "Games Played".ljust(14) + "Minutes Played" + "\n" + "".ljust(34) + "*"*72
 
-tabla_rankings = {"001": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "002": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "003": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "004": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "005": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "006": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "007": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "008": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "009": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "010": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "011": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "012": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "013": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "014": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "015": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "016": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "017": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "018": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "019": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "020": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "021": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "022": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123},
-                  "023": {"name": "asd", "earnings": "12", "games": "10", "minutes": 12.123}
-                  }
+tabla_rankings = {}
 
-tabla_partida = {"10": []}
+tabla_partida = {}

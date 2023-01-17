@@ -463,38 +463,47 @@ def rankings_more_earnings():
                       str(funcions_dades.dades.tabla_rankings[player]["minutes"]).rjust(16)
         cadena = (funcions_dades.dades.cabecera_rankings + cadena)
         print(cadena)
-        if numero_cadena == 10:
-            opc = input("\n" + "".ljust(42) + "+ to go ahead, exit to go Rankings: ")
-            if opc.lower() == "exit":
-                break
-            elif opc == "+":
-                numero_cadena += 10
-                borrarPantalla()
+        if len(funcions_dades.dades.tabla_rankings) > 10:
+            if numero_cadena == 10:
+                opc = input("\n" + "".ljust(42) + "+ to go ahead, exit to go Rankings: ")
+                if opc.lower() == "exit":
+                    break
+                elif opc == "+":
+                    numero_cadena += 10
+                    borrarPantalla()
+                else:
+                    print("=" * 63 + "Invalid option" + "=" * 63)
+                    input("Press enter to continue".center(140))
+                    borrarPantalla()
+            elif numero_cadena == numero_dict:
+                opc = input("\n" + "".ljust(42) + "- to go back, exit to go Rankings: ")
+                if opc.lower() == "exit":
+                    break
+                elif opc == "-":
+                    numero_cadena -= 10
+                    borrarPantalla()
+                else:
+                    print("=" * 63 + "Invalid option" + "=" * 63)
+                    input("Press enter to continue".center(140))
+                    borrarPantalla()
             else:
-                print("=" * 63 + "Invalid option" + "=" * 63)
-                input("Press enter to continue".center(140))
-                borrarPantalla()
-        elif numero_cadena == numero_dict:
-            opc = input("\n" + "".ljust(42) + "- to go back, exit to go Rankings: ")
-            if opc.lower() == "exit":
-                break
-            elif opc == "-":
-                numero_cadena -= 10
-                borrarPantalla()
-            else:
-                print("=" * 63 + "Invalid option" + "=" * 63)
-                input("Press enter to continue".center(140))
-                borrarPantalla()
+                opc = input("\n" + "".ljust(42) + "+ to go ahead, - to go back , exit to go Rankings: ")
+                if opc.lower() == "exit":
+                    break
+                elif opc == "+":
+                    numero_cadena += 10
+                    borrarPantalla()
+                elif opc == "-":
+                    numero_cadena -= 10
+                    borrarPantalla()
+                else:
+                    print("=" * 63 + "Invalid option" + "=" * 63)
+                    input("Press enter to continue".center(140))
+                    borrarPantalla()
         else:
-            opc = input("\n" + "".ljust(42) + "+ to go ahead, - to go back , exit to go Rankings: ")
+            opc = input("\n" + "".ljust(42) + "exit to go Rankings: ")
             if opc.lower() == "exit":
                 break
-            elif opc == "+":
-                numero_cadena += 10
-                borrarPantalla()
-            elif opc == "-":
-                numero_cadena -= 10
-                borrarPantalla()
             else:
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))

@@ -193,6 +193,12 @@ insert into player values ('34343434H', 'Humano2', 30, true);
 insert into player values ('45129508N', 'Boot2', 50, false);
 insert into cardgame values (001, 3, 1, '2022-01-16 16:00:00', '2022-01-16 20:00:00', 'ESP');
 insert into cardgame values (002, 2, 2, '2022-01-16 16:00:00', '2022-01-16 20:00:00', 'ESP');
+insert into cardgame values (003, 2, 2, '2022-01-16 10:00:00', '2022-01-16 10:05:00', 'ESP');	
+insert into cardgame values (004, 2, 1, '2022-01-16 19:45:00', '2022-01-16 20:00:00', 'ESP');
+insert into player_game values (003, '12312313K', '001', 20, 35);
+insert into player_game values (003, '45129508N', 'E02', 20, 5);
+insert into player_game values (004, '12312313K', 'E07', 20, 11);
+insert into player_game values (004, '44444444A', 'E04', 20, 29);
 insert into player_game values (001, '12312313K', '001', 20, 11);
 insert into player_game values (002, '12312313K', '005', 20, 11);
 insert into player_game values (001, '44444444A', '002', 20, 15);
@@ -203,8 +209,14 @@ insert into player_game_round values (001, 1, '44444444A', True, 0, 5.5, 20, 20)
 insert into player_game_round values (001, 1, '34343434H', False, 5, 5, 20, 15);
 insert into player_game_round values (002, 1, '12312313K', False, 5, 7.5, 20, 30);
 insert into player_game_round values (002, 1, '44444444A', True, 0, 7, 20, 10);
-insert into player_game_round values (002, 2, '12312313K', True, 0, 8, 30, 25);
-insert into player_game_round values (002, 2, '44444444A', False, 0, 6, 10, 15);
+insert into player_game_round values (002, 2, '12312313K', True, 0, 8, 30, 15);
+insert into player_game_round values (002, 2, '44444444A', False, 15, 6, 15, 30);
+insert into player_game_round values (003, 1, '12312313K', True, 0, 5.5, 20, 30);
+insert into player_game_round values (003, 1, '45129508N', False, 10, 5, 20, 10);
+insert into player_game_round values (003, 2, '12312313K', True, 0, 5.5, 30, 35);
+insert into player_game_round values (003, 2, '45129508N', False, 5, 5, 10, 5);
+insert into player_game_round values (004, 1, '44444444A', True, 0, 6.5, 20, 29);
+insert into player_game_round values (004, 1, '12312313K', False, 9, 6, 20, 11);
 
 -- VISTA PARA MOSTRAR LA TABLA DE RANKINGS
 -- VISTA PARA FACILITAR LA CREACION DE LA TABLA FINAL DE RANKINGS
@@ -233,4 +245,69 @@ from player p left join player_earnings e on e.player_id=p.player_id
 join player_minutes m on m.player_id=p.player_id;
 
 
+-- VISTAS INFORME
+-- 1) CARTA INICIAL MAS REPETIDA DE LOS PLAYERS CON 3 GAMES O MÁS.
+-- NO ESTA ACABADA
+-- select distinct p.player_id, pg.initial_card_id, 
+-- (select max(count(*)) from player_game where pg.player_id = player_id and pg.initial_card_id = initial_card_id) as repeticions
+-- from player p
+-- join player_game pg on p.player_id=pg.player_id
+-- join cardgame c on c.cardgame_id=pg.cardgame_id;
 
+-- 2) APUESTA MAS ALTA 
+create view apuesta_mas_alta as 
+select player_id as player, cardgame_id as partida, bet_points as apuesta 
+from player_game_round where bet_points like (select max(bet_points) from player_game_round);
+
+-- 3) APUESTA MAS BAJA
+create view apuesta_mas_baja as 
+select player_id as player, cardgame_id as partida, bet_points as apuesta 
+from player_game_round where bet_points like (select min(bet_points) from player_game_round);
+
+-- 4) 
+-- NO ESTA ACABADA
+
+-- 5) PARTIDAS GANADAS POR BOTS
+create view victorias_bots as 
+select c.cardgame_id as partida, (pg.ending_points - pg.starting_points) as puntos_ganados
+from player_game pg
+join player p on p.player_id=pg.player_id
+join cardgame c on c.cardgame_id=pg.cardgame_id
+where p.human is False and pg.ending_points > pg.starting_points;
+
+-- 6) RONDAS GANADAS POR LA BANCA EN CADA PARTIDA
+create view rondas_ganadas_banca as 
+select distinct c.cardgame_id as partida, 
+(select count(*) from player_game_round where is_bank is True and
+(pgr.ending_round_points > pgr.starting_round_points) and cardgame_id=c.cardgame_id) as rondas_ganadas
+from player_game_round pgr
+join cardgame c on c.cardgame_id=pgr.cardgame_id
+where pgr.is_bank is True;
+
+-- 7) USUARIOS QUE HAN SIDO BANCA EN CADA PARTIDA
+create view usuarios_banca_partida as 
+select distinct c.cardgame_id as partida, 
+(select count(*) from player_game_round where is_bank is True and cardgame_id=c.cardgame_id) as usuarios_banca
+from player_game_round pgr
+join cardgame c on c.cardgame_id=pgr.cardgame_id;
+
+-- 8) APUESTA MEDIA POR PARTIDA
+create view apuesta_media_partida as 
+select distinct c.cardgame_id as partida, (select avg(bet_points) from player_game_round where cardgame_id=c.cardgame_id) as media
+from player_game pgr
+join cardgame c on c.cardgame_id=pgr.cardgame_id;
+
+-- 9) APUESTA MEDIA EN LA PRIMERA RONDA DE CADA PARTIDA
+create view apuesta_media_ronda1 as 
+select distinct c.cardgame_id as partida, 
+(select avg(bet_points) from player_game_round where cardgame_id=c.cardgame_id and round_num = 1) as media
+from player_game pgr
+join cardgame c on c.cardgame_id=pgr.cardgame_id;
+
+
+-- 10) APUESTA MEDIA EN LA ULTIMA RONDA DE CADA PARTIDA
+create view apuesta_media_ultima_ronda as 
+select distinct c.cardgame_id as partida, 
+(select avg(bet_points) from player_game_round where cardgame_id=c.cardgame_id and round_num = c.rounds) as media
+from player_game pgr
+join cardgame c on c.cardgame_id=pgr.cardgame_id;

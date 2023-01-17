@@ -172,7 +172,6 @@ def show_players():
             print(cabecera_show_players + cadena)
             return
 
-
 def remove_players():
     funcions_dades.dades.players = {}
     charge_bbdd_players()
@@ -225,7 +224,6 @@ def show_setting_players():
             borrarPantalla()
             return
 
-
 def settings_players():
     show_setting_players()
     if len(funcions_dades.dades.player_game) == 0 or len(funcions_dades.dades.players) == 0:
@@ -277,7 +275,6 @@ def settings_players():
             elif opc.lower() == "sh":
                 show_setting_players()
 
-
 def settings_decks():
     borrarPantalla()
     menu_decks = "".ljust(47) + "1) ESP - ESP" + "\n" + "".ljust(47) + "2) POK - POK" + "\n" + "".ljust(
@@ -293,7 +290,6 @@ def settings_decks():
         funcions_dades.dades.deckgame = "POK"
         print("".ljust(47) + "Established Card Deck POK, Poker Deck")
         input("".ljust(47) + "Enter to continue")
-
 
 def settings_max_rounds():
     while True:
@@ -342,6 +338,8 @@ def new_bbdd_player(nif, name, valor_apuestas, human):
 def remove_bbdd_player(nif):
     conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
     cursor = conexion.cursor()
+    cursor.execute("delete from player_round_game where player_id like '{}';".format(nif))
+    cursor.execute("delete from player_game where player_id like '{}';".format(nif))
     cursor.execute("delete from player where player_id like '{}';".format(nif))
     conexion.commit()
     cursor.close()
@@ -350,25 +348,23 @@ def remove_bbdd_player(nif):
 
 def crear_listas_10_players():
     numero_dict = 10
-    numero_partir = 0
     lista = []
     for player in funcions_dades.dades.tabla_rankings.keys():
-        if numero_partir == numero_dict and str(numero_dict) not in funcions_dades.dades.tabla_partida:
+        if len(lista) == 10:
             funcions_dades.dades.tabla_partida[str(numero_dict)] = lista
-            numero_dict += 10
             lista = []
-            lista.append(player)
-        elif numero_partir == numero_dict:
-            funcions_dades.dades.tabla_partida[str(numero_dict)] = lista
             numero_dict += 10
-            lista = []
             lista.append(player)
         else:
             lista.append(player)
-            numero_partir += 1
             funcions_dades.dades.tabla_partida[str(numero_dict)] = lista
+
+
     funcions_dades.dades.tabla_partida[str(numero_dict + 10)] = ""
+    print(str(funcions_dades.dades.tabla_partida))
     return numero_dict
+
+crear_listas_10_players()
 
 def show_rankings_more_earnings():
     lista_rankings = []
@@ -468,7 +464,7 @@ def rankings_more_earnings():
         cadena = (funcions_dades.dades.cabecera_rankings + cadena)
         print(cadena)
         if numero_cadena == 10:
-            opc = input("\n" + "".ljust(34) + "(+ to repage, exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "+ to go ahead, exit to go Rankings: ")
             if opc.lower() == "exit":
                 break
             elif opc == "+":
@@ -479,7 +475,7 @@ def rankings_more_earnings():
                 input("Press enter to continue".center(140))
                 borrarPantalla()
         elif numero_cadena == numero_dict:
-            opc = input("\n" + "".ljust(34) + "(- to repage, exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "- to go back, exit to go Rankings: ")
             if opc.lower() == "exit":
                 break
             elif opc == "-":
@@ -490,7 +486,7 @@ def rankings_more_earnings():
                 input("Press enter to continue".center(140))
                 borrarPantalla()
         else:
-            opc = input("\n" + "".ljust(34) + "(+ to repage, - to repage , exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "+ to go ahead, - to go back , exit to go Rankings: ")
             if opc.lower() == "exit":
                 break
             elif opc == "+":
@@ -519,7 +515,7 @@ def rankings_more_games():
         cadena = (funcions_dades.dades.cabecera_rankings + cadena)
         print(cadena)
         if numero_cadena == 10:
-            opc = input("\n" + "".ljust(34) + "(+ to repage, exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "(+ to repage, exit to go back): ")
             if opc.lower() == "exit":
                 break
             elif opc == "+":
@@ -530,7 +526,7 @@ def rankings_more_games():
                 input("Press enter to continue".center(140))
                 borrarPantalla()
         elif numero_cadena == numero_dict:
-            opc = input("\n" + "".ljust(34) + "(- to repage, exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "(- to repage, exit to go back): ")
             if opc.lower() == "exit":
                 break
             elif opc == "-":
@@ -541,7 +537,7 @@ def rankings_more_games():
                 input("Press enter to continue".center(140))
                 borrarPantalla()
         else:
-            opc = input("\n" + "".ljust(34) + "(+ to repage, - to repage , exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "(+ to repage, - to repage , exit to go back): ")
             if opc.lower() == "exit":
                 break
             elif opc == "+":
@@ -554,8 +550,6 @@ def rankings_more_games():
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))
                 borrarPantalla()
-
-rankings_more_games()
 
 def rankings_more_minutes():
     numero_dict = show_rankings_more_minutes()
@@ -572,7 +566,7 @@ def rankings_more_minutes():
         cadena = (funcions_dades.dades.cabecera_rankings + cadena)
         print(cadena)
         if numero_cadena == 10:
-            opc = input("\n" + "".ljust(34) + "(+ to repage, exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "(+ to repage, exit to go back): ")
             if opc.lower() == "exit":
                 break
             elif opc == "+":
@@ -583,7 +577,7 @@ def rankings_more_minutes():
                 input("Press enter to continue".center(140))
                 borrarPantalla()
         elif numero_cadena == numero_dict:
-            opc = input("\n" + "".ljust(34) + "(- to repage, exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "(- to repage, exit to go back): ")
             if opc.lower() == "exit":
                 break
             elif opc == "-":
@@ -594,7 +588,7 @@ def rankings_more_minutes():
                 input("Press enter to continue".center(140))
                 borrarPantalla()
         else:
-            opc = input("\n" + "".ljust(34) + "(+ to repage, - to repage , exit to go back): ")
+            opc = input("\n" + "".ljust(42) + "(+ to repage, - to repage , exit to go back): ")
             if opc.lower() == "exit":
                 break
             elif opc == "+":

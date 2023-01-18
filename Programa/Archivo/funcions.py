@@ -611,3 +611,27 @@ def rankings_more_minutes():
                 print("=" * 63 + "Invalid option" + "=" * 63)
                 input("Press enter to continue".center(140))
                 borrarPantalla()
+
+
+def bbdd_highest_bet_game():
+    funcions_dades.dades.highest_bet = {}
+    conexion = mysql.connector.connect(user='root', password='1234', host='localhost', database='projecte1', port='3306')
+    cursor = conexion.cursor()
+    cursor.execute("select * from apuesta_mas_alta;")
+    game = cursor.fetchone()
+    while game:
+        funcions_dades.dades.highest_bet[game[1]] = {"player": game[0], "bet": game[2]}
+        game = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return
+def highest_bet_game():
+    borrarPantalla()
+    numero_cadena = 10
+    menu = "".ljust(42) + "*"*50 + "\n" + "".ljust(45) + "ID Game".ljust(12) + "ID Player".ljust(28) + "Max Bet" + "\n" + "".ljust(42) + "*"*50
+    bbdd_highest_bet_game()
+    cadena = ""
+    for game in funcions_dades.dades.tabla_partida[str(numero_cadena)]:
+        cadena += "\n" + str(game).rjust(52) + "".ljust(5) + funcions_dades.dades.highest_bet[game][
+            "player"].ljust(28) + str(funcions_dades.dades.highest_bet[game]["bet"]).rjust(7)
+    cadena = (menu + cadena)

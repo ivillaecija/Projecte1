@@ -278,14 +278,14 @@ order by i.player_id;
 
 
 -- 2) APUESTA MAS ALTA 
-create view apuesta_mas_alta as 
-select player_id as player, cardgame_id as partida, bet_points as apuesta 
-from player_game_round where bet_points like (select max(bet_points) from player_game_round);
+create view apuesta_mas_alta as select pgr.player_id as player, pgr.cardgame_id as partida, 
+pgr.bet_points as apuesta from player_game_round pgr where pgr.bet_points like 
+(select max(bet_points) from player_game_round where cardgame_id=pgr.cardgame_id);
 
 -- 3) APUESTA MAS BAJA
-create view apuesta_mas_baja as 
-select player_id as player, cardgame_id as partida, bet_points as apuesta 
-from player_game_round where bet_points like (select min(bet_points) from player_game_round);
+create view apuesta_mas_baja as select pgr.player_id as player, pgr.cardgame_id as partida, 
+pgr.bet_points as apuesta from player_game_round pgr where pgr.bet_points like 
+(select min(bet_points) from player_game_round where cardgame_id=pgr.cardgame_id and bet_points > 0);
 
 -- 4) 
 -- NO ESTA ACABADA

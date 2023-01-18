@@ -103,7 +103,7 @@ insert into card values ('C04', 'Cuatro de Copas', 4, 2, 4, 'ESP');
 insert into card values ('C05', 'Cinco de Copas', 5, 2, 5, 'ESP');
 insert into card values ('C06', 'Seis de Copas', 6, 2, 6, 'ESP');
 insert into card values ('C07', 'Siete de Copas', 7, 2, 7, 'ESP');
-insert into card values ('C08', 'Ocho de Copas', 8, 2, 0.5, 'ESP');
+insert into card values ('C08', 'Ocho de Copas', 8, 2, 0.5, 'ESP');	
 insert into card values ('C09', 'Nueve de Copas', 9, 2, 0.5, 'ESP');
 insert into card values ('C10', 'Diez de Copas', 10, 2, 0.5, 'ESP');
 insert into card values ('C11', 'Once de Copas', 11, 2, 0.5, 'ESP');	
@@ -247,12 +247,35 @@ join player_minutes m on m.player_id=p.player_id;
 
 -- VISTAS INFORME
 -- 1) CARTA INICIAL MAS REPETIDA DE LOS PLAYERS CON 3 GAMES O MÁS.
--- NO ESTA ACABADA
--- select distinct p.player_id, pg.initial_card_id, 
--- (select max(count(*)) from player_game where pg.player_id = player_id and pg.initial_card_id = initial_card_id) as repeticions
--- from player p
--- join player_game pg on p.player_id=pg.player_id
--- join cardgame c on c.cardgame_id=pg.cardgame_id;
+-- Para hacer esta vista he utilizado otras vista ya que no conseguia hacerla de una sola.
+-- 1.1) VISTA QUE ME DEVUELVE TODAS LAS INITIAL_CARD_ID QUE HAN SALIDO CON OTRAS FILAS COMO QUIEN LA HA SACADO, 
+-- CUANTAS VECES LA HA SACADO, CUANTAS PARTIDAS HA JUGADO, A QUE BARAJA PERTENECE I QUE PRIORIDAD TIENE LA CARTA.(DECK Y PRIORITY ES PARA SACAR EL PALO DE
+create view initial_cards as select distinct pg.player_id, pg.initial_card_id, cg.deck_id as baraja, c.card_priority as priority, 
+count(pg.initial_card_id) as repeticions, 
+(select count(*) from player_game where player_id=pg.player_id) as games_played
+from player_game pg
+join cardgame cg on cg.cardgame_id = pg.cardgame_id
+join card c on pg.initial_card_id = c.card_id
+group by pg.player_id, pg.initial_card_id, cg.deck_id, c.card_priority;
+
+-- 1.2) VISTA FINAL
+create view initial_card_most_repeated_player as select i.player_id, 
+	CONCAT_WS('',
+			IF(i.baraja = 'ESP' and i.priority = 4, 'Oros', ''),
+            IF(i.baraja = 'ESP' and i.priority = 3, 'Espadas', ''),
+            IF(i.baraja = 'ESP' and i.priority = 2, 'Copas', ''),
+            IF(i.baraja = 'ESP' and i.priority = 1, 'Bastos', ''),
+            IF(i.baraja = 'POK' and i.priority = 4, 'Diamantes', ''),
+            IF(i.baraja = 'POK' and i.priority = 3, 'Picas', ''),
+            IF(i.baraja = 'POK' and i.priority = 2, 'Corazones', ''),
+            IF(i.baraja = 'POK' and i.priority = 1, 'Treboles', '')
+		) as palo,
+i.initial_card_id, i.repeticions, 
+(select count(*) from player_game where i.player_id=player_id) as games_played
+from initial_cards i
+where i.repeticions in (select max(repeticions) from initial_cards where player_id = i.player_id)
+order by i.player_id;
+
 
 -- 2) APUESTA MAS ALTA 
 create view apuesta_mas_alta as 

@@ -232,7 +232,7 @@ from player_earning_game pg;
 
 -- 3) VISTA PARA MOSTRAR LOS MINUTOS DE CADA JUGADOR EN CADA PARTIDA
 create view minutos_player_game as select pg.player_id, c.cardgame_id, TIMESTAMPDIFF(MINUTE,c.start_hour,c.end_hour) as minutos 
-from cardgame c join player_game pg on c.cardgame_id=pg.cardgame_id
+from cardgame c join player_game pg on c.cardgame_id=pg.cardgame_id;
 
 -- 4) VISTA PARA MOSTRAR LOS MINUTOS TOTALES DE CADA JUGADOR
 create view player_minutes as select p.player_id, coalesce(null, (select sum(minutos) from minutos_player_game m 

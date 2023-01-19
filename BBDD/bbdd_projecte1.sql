@@ -287,8 +287,15 @@ create view apuesta_mas_baja as select pgr.player_id as player, pgr.cardgame_id 
 pgr.bet_points as apuesta from player_game_round pgr where pgr.bet_points like 
 (select min(bet_points) from player_game_round where cardgame_id=pgr.cardgame_id and bet_points > 0);
 
--- 4) 
--- NO ESTA ACABADA
+-- 4) PORCENTAJE DE VICTORIAS EN CADA PARTIDA DE CADA JUGADOR
+create view porcentaje_rondas_ganadas_player as select pg.cardgame_id, pg.player_id, c.rounds, 
+(select avg(bet_points) from player_game_round where player_id=pg.player_id and cardgame_id=pg.cardgame_id) as bet_average,
+(select count(*) from player_game_round where ending_round_points > starting_round_points
+and player_id=pg.player_id and cardgame_id=pg.cardgame_id) as rondas_ganadas,
+(select concat(round((select count(*) from player_game_round where ending_round_points > starting_round_points
+and player_id=pg.player_id and cardgame_id=pg.cardgame_id) / (select rounds from cardgame where cardgame_id=pg.cardgame_id) *100),'%')) as Porcentaje
+from player_game pg
+join cardgame c on pg.cardgame_id=c.cardgame_id; 
 
 -- 5) PARTIDAS GANADAS POR BOTS
 create view victorias_bots as 

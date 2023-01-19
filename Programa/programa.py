@@ -102,25 +102,25 @@ while not salir:
         funcions.borrarPantalla()
         opc = funcions.getOpt(menu05, "".ljust(42) + "Option: ", [1,2,3,4,5,6,7,8,9,10,11], borrar_pantalla=True)
         if opc == 1:
-            print()
+            funcions.initial_card_most_repeated()
         elif opc == 2:
-            print()
+            funcions.highest_bet_game()
         elif opc == 3:
-            print()
+            funcions.lowest_bet_game()
         elif opc == 4:
-            print()
+            funcions.perc_round_won_player_game()
         elif opc == 5:
-            print()
+            funcions.bot_wins()
         elif opc == 6:
-            print()
+            funcions.rounds_win_bank()
         elif opc == 7:
-            print()
+            funcions.users_bank()
         elif opc == 8:
-            print()
+            funcions.average_bet_game()
         elif opc == 9:
-            print()
+            funcions.average_bet_first_round()
         elif opc == 10:
-            print()
+            funcions.average_bet_last_round()
         elif opc == 11:
             flg_05 = False
             flg_00 = True

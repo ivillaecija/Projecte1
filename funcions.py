@@ -116,10 +116,8 @@ def orderAllPlayers():
 def showGameStats(list_id_players):
     players = dades.context_game["players"]
     cadena = ""
-    if len(players) == 1:
-        print("Stats of {}".format(dades.players[list_id_players]["name"]).center(100, "*"))
-    else:
-        print("Stats of players".center(100, "*") + "\n")
+
+    print("Stats of players".center(100, "*") + "\n")
 
     titles = ["name","type","human","bank","initialCard","priority","bet","points","cards","roundPoints"]
     for pasadas in titles:
@@ -212,7 +210,7 @@ def orderCard(id_player,auto=False):
 
         if (dades.players[id_player]["human"] == True) and (auto == False):
             if len(dades.round_player_cards) >= 1:
-                print("Chance of exceed 7.5 == ",round(dng_cards/len(dades.context_game["mazo"])*100,2),"%"+"\n")
+                print("Chance of exceed 7.5 == ",round(dng_cards/len(dades.context_game["mazo"])*100),"%"+"\n")
                 save = input("Are you sure do you want to order another card? Y/y = Yes, another key = Not")
                 if save.lower() == "y":  # SAVE THE CARD IF YES
                     print("The new card is " + dades.cartas[dades.context_game["typo_mazo"]][dades.context_game["mazo"]
@@ -238,24 +236,37 @@ def orderCard(id_player,auto=False):
                 takeCard(id_player)
                 player_cards_value += dades.cartas[dades.context_game["typo_mazo"]][dades.round_player_cards[-1]]["realValue"]
 
-
-            if len(dades.round_player_cards) >= 1:
+            elif len(dades.round_player_cards) >= 1:
                 if dades.players[id_player]["type"] == 30:     #30 -> Cautious, 40 -> Moderated, 50 -> Bold
-                    if round(dng_cards/len(dades.context_game["mazo"])*100,1) <= 30:
+                    if round(dng_cards/len(dades.context_game["mazo"])*100) <= 30:
+                        if dades.players[id_player]["points"] > 14:
+                            dades.players[id_player]["bet"] = round((dades.players[id_player]["points"]/100)*30)
+                        else:
+                            dades.players[id_player]["bet"] = 4
                         takeCard(id_player)
                         player_cards_value += dades.cartas[dades.context_game["typo_mazo"]][dades.round_player_cards[-1]]["realValue"]
 
                     else:
                         dades.flg_game = False
                 elif dades.players[id_player]["type"] == 40:
-                    if round(dng_cards/len(dades.context_game["mazo"])*100,1) <= 50:
+                    if round(dng_cards/len(dades.context_game["mazo"])*100) <= 50:
+                        if dades.players[id_player]["points"] > 10:
+                            dades.players[id_player]["bet"] = round((dades.players[id_player]["points"]/100)*40)
+                        else:
+                            dades.players[id_player]["bet"] = 4
                         takeCard(id_player)
                         player_cards_value += dades.cartas[dades.context_game["typo_mazo"]][dades.round_player_cards[-1]]["realValue"]
+
                     else:
                         dades.flg_game = False
 
                 elif dades.players[id_player]["type"] == 50:
-                    if round(dng_cards/len(dades.context_game["mazo"])*100,1) <= 70:
+                    if round(dng_cards/len(dades.context_game["mazo"])*100) <= 70:
+                        if dades.players[id_player]["points"] > 8:
+                            dades.players[id_player]["bet"] = round((dades.players[id_player]["points"]/100)*50)
+                        else:
+                            dades.players[id_player]["bet"] = 4
+                        takeCard(id_player)
                         player_cards_value += dades.cartas[dades.context_game["typo_mazo"]][dades.round_player_cards[-1]]["realValue"]
 
                     else:
@@ -274,50 +285,64 @@ def order_by_priority(lista_ids):
     return lista_ids
 
 def game():
+
     orderAllPlayers()
     setGamePriority()
-    p_winer = False
+
     round = 0
+    p_winer = False
     bet_ban = False
+
     g_players = dades.game
+
     while dades.context_game["round"] != 0:
+
+        eliminate_players = True
+        pointer = 0
         candidatos_banka = []
+
         for id_player in g_players:
             dades.round_player_cards.clear()
             bet_ban = False
             dades.flg_game = True
             while dades.flg_game == True:
-                if dades.players[id_player]["human"] == False:
-                    orderCard(id_player)
-                else:
-                    opc = getOpt(dades.menu03,"Option:",[1,2,3,4,5,6])
-                    if opc == 1:
-                        print(showPlayerStat(id_player))
-                    elif opc == 2:
-                        print(showGameStats(dades.game))
-                    elif opc == 3:
-                        try:
-                            if dades.players[id_player]["bank"] == True:  # CANT BET IF ITS THE BANK
-                                raise ValueError("The bank can't bet")
-                            elif bet_ban == True:
-                                raise ValueError("Can't bet once a card has been ordered")  # IF ORDERED A CARD CANT BET
-                            dades.players[id_player]["bet"] = setBet(id_player,g_players[-1])
-                        except ValueError as e:
-                            print(e)
-                    elif opc == 4:
-                        if dades.players[id_player]["roundPoints"] < 7.5:
-                            orderCard(id_player)    # ORDER A CARD ACTIVATES BET BAN
-                            bet_ban = True
-                        else:
-                            dades.flg_game = False
-                    elif opc == 5:
-                        orderCard(id_player, auto=True)
-                        if id_player != g_players[-1]:
+                if dades.players[id_player]["roundPoints"] < 7.5:
+                    if dades.players[id_player]["human"] == False:
+                        orderCard(id_player)
+                    else:
+                        opc = getOpt(dades.menu03,"Option:",[1,2,3,4,5,6])
+                        if opc == 1:
+                            print(showPlayerStat(id_player))
+                        elif opc == 2:
                             print(showGameStats(dades.game))
-                        dades.flg_game = False
-                    elif opc == 6:
-                        dades.flg_game = False
-        dades.context_game["round"] -= 1
+                        elif opc == 3:
+                            try:
+                                if dades.players[id_player]["bank"] == True:  # CANT BET IF ITS THE BANK
+                                    raise ValueError("The bank can't bet")
+                                elif bet_ban == True:
+                                    raise ValueError("Can't bet once a card has been ordered")  # IF ORDERED A CARD CANT BET
+                                dades.players[id_player]["bet"] = setBet(id_player,g_players[-1])
+                            except ValueError as e:
+                                print(e)
+                        elif opc == 4:
+                            if dades.players[id_player]["roundPoints"] < 7.5:
+                                orderCard(id_player)    # ORDER A CARD ACTIVATES BET BAN
+                                bet_ban = True
+                            else:
+                                dades.flg_game = False
+                        elif opc == 5:
+                            orderCard(id_player, auto=True)
+                            if g_players.index(id_player) != len(g_players):
+                                print(showGameStats(dades.game))
+                        elif opc == 6:
+                            if g_players.index(id_player) != len(g_players):
+                                print(showGameStats(dades.game))
+                            dades.flg_game = False
+                else:
+                    dades.flg_game = False
+
+        borrarPantalla()
+
         for i in range(len(g_players)-1):
             p_winer = False
             if dades.players[g_players[i]]["roundPoints"] == 7.5 and dades.players[g_players[-1]]["roundPoints"] != 7.5: # PLAYER 7.5 BANKA NO
@@ -363,17 +388,49 @@ def game():
             elif p_winer == False:
                 dades.players[g_players[-1]]["points"] += dades.players[g_players[i]]["bet"]
                 dades.players[g_players[i]]["points"] -= dades.players[g_players[i]]["bet"]
+
+        while eliminate_players:
+            print("Pointer {}".format(pointer))
+            print(g_players)
+            if dades.players[g_players[pointer]]["points"] <= 0:
+                if dades.players[g_players[pointer]]["bank"] == True:
+                    g_players.remove(g_players[pointer])
+                    dades.players[g_players[0]]["bank"] = True
+                    g_players.append(g_players[0])
+                    g_players.remove(g_players[0])
+                else:
+                    g_players.remove(g_players[pointer])
+            else:
+                pointer += 1
+
+            if pointer > len(g_players)-1 :
+                eliminate_players = False
+
+        for reset in g_players:
+            dades.players[reset]["roundPoints"] = 0
+            dades.players[reset]["cards"] = []
+
+        if len(g_players) == 1:
+            return g_players[0]
+        round += 1
+        print(" ROUND {} ".format(round).center(100,"*"))
         print(showGameStats(dades.game))
-        for p in g_players:
-            dades.players[p]["roundPoints"] = 0
-            dades.players[p]["cards"] = []
-            if dades.players[p]["points"] == 0:
-                if dades.players[p]["bank"] == True:
-                    dades.players[g_players[p-1]]["bank"] = True
-                g_players.remove(g_players[g_players.index(p)])
+        dades.context_game["round"] -= 1
+
+    for pasadas in range(len(g_players)-1):
+        for winer in range(len(g_players)-1):
+            if dades.players[g_players[winer]]["points"] < dades.players[g_players[winer+1]]["points"]:
+
+                dades.players[g_players[winer]]["points"], dades.players[g_players[winer+1]]["points"] = \
+                dades.players[g_players[winer+1]]["points"], dades.players[g_players[winer]]["points"]
+
+            elif dades.players[g_players[winer]]["points"] == dades.players[g_players[winer+1]]["points"] and \
+                 dades.players[g_players[winer+1]]["bank"] == True:
+
+                dades.players[g_players[winer]]["points"], dades.players[g_players[winer + 1]]["points"] = \
+                    dades.players[g_players[winer + 1]]["points"], dades.players[g_players[winer]]["points"]
+    return g_players[0]
 
 
 
-
-
-game()
+print(game())

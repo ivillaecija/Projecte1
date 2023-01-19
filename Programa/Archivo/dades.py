@@ -124,5 +124,15 @@ cabecera_rankings = "".ljust(34) + "*"*72 + "\n" + "".ljust(34) + "Player ID".lj
                     "Games Played".ljust(14) + "Minutes Played" + "\n" + "".ljust(34) + "*"*72
 
 tabla_rankings = {}
-
 tabla_partida = {}
+default = []
+initial_card_most_repeated = {}
+highest_bet = {}
+lowest_bet = {}
+percentatge_round_won_player = {}
+games_won_bots = {}
+bank_round_wins = {}
+number_bank_users_game = {}
+average_bet_game = {}
+average_first_round_game = {}
+average_last_round_game = {}

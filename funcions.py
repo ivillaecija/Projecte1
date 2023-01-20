@@ -415,22 +415,23 @@ def game():
         round += 1
         print(" ROUND {} ".format(round).center(100,"*"))
         print(showGameStats(dades.game))
+        input()
         dades.context_game["round"] -= 1
 
     for pasadas in range(len(g_players)-1):
         for winer in range(len(g_players)-1):
             if dades.players[g_players[winer]]["points"] < dades.players[g_players[winer+1]]["points"]:
 
-                dades.players[g_players[winer]]["points"], dades.players[g_players[winer+1]]["points"] = \
-                dades.players[g_players[winer+1]]["points"], dades.players[g_players[winer]]["points"]
+                g_players[winer], g_players[winer+1] = \
+                g_players[winer+1], g_players[winer]
 
             elif dades.players[g_players[winer]]["points"] == dades.players[g_players[winer+1]]["points"] and \
                  dades.players[g_players[winer+1]]["bank"] == True:
 
-                dades.players[g_players[winer]]["points"], dades.players[g_players[winer + 1]]["points"] = \
-                    dades.players[g_players[winer + 1]]["points"], dades.players[g_players[winer]]["points"]
+                g_players[winer], g_players[winer + 1] = \
+                g_players[winer + 1], g_players[winer]
     return g_players[0]
 
 
-
+print()
 print(game())

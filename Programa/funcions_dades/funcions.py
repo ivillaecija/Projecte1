@@ -1691,7 +1691,7 @@ def orderCard(id_player,auto=False):
                         if funcions_dades.dades.players[id_player]["points"] > 14:
                             funcions_dades.dades.players[id_player]["bet"] = round((funcions_dades.dades.players[id_player]["points"]/100)*30)
                         else:
-                            funcions_dades.dades.players[id_player]["bet"] = 4
+                            funcions_dades.dades.players[id_player]["bet"] = funcions_dades.dades.players[id_player]["points"]
                         takeCard(id_player)
                         player_cards_value += funcions_dades.dades.cartas[funcions_dades.dades.context_game["typo_mazo"]][funcions_dades.dades.round_player_cards[-1]]["realValue"]
 
@@ -1702,7 +1702,7 @@ def orderCard(id_player,auto=False):
                         if funcions_dades.dades.players[id_player]["points"] > 10:
                             funcions_dades.dades.players[id_player]["bet"] = round((funcions_dades.dades.players[id_player]["points"]/100)*40)
                         else:
-                            funcions_dades.dades.players[id_player]["bet"] = 4
+                            funcions_dades.dades.players[id_player]["bet"] = funcions_dades.dades.players[id_player]["points"]
                         takeCard(id_player)
                         player_cards_value += funcions_dades.dades.cartas[funcions_dades.dades.context_game["typo_mazo"]][funcions_dades.dades.round_player_cards[-1]]["realValue"]
 
@@ -1714,7 +1714,7 @@ def orderCard(id_player,auto=False):
                         if funcions_dades.dades.players[id_player]["points"] > 8:
                             funcions_dades.dades.players[id_player]["bet"] = round((funcions_dades.dades.players[id_player]["points"]/100)*50)
                         else:
-                            funcions_dades.dades.players[id_player]["bet"] = 4
+                            funcions_dades.dades.players[id_player]["bet"] = funcions_dades.dades.players[id_player]["points"]
                         takeCard(id_player)
                         player_cards_value += funcions_dades.dades.cartas[funcions_dades.dades.context_game["typo_mazo"]][funcions_dades.dades.round_player_cards[-1]]["realValue"]
 

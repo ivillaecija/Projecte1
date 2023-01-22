@@ -10,7 +10,7 @@ INSTRUCCIONES PARA LA INSTALACION DEL PROGRAMA EN WINDOWS
 4) Cuando se ejecute tendremos que marcar la opción que dice 'add python x.x to path' y seleccionar install now.
 5) Una vez hayamos descargado python tendremos que abrir un cmd como administradores, simplemente buscamos cmd en la barra de busqueda, hacemos click derecho 'Ejecutar como administradores'.
 6) Dentro del cmd ejecutamos lo siguiente 'py -m pip install mysql-connector-python'
-7) Una vez hecho esto nos iremos al github y descargaremos el archivo programa.zip.
+7) Una vez hecho esto nos iremos al github, seleccionaremos la release y descargaremos el archivo programa.zip.
 8) Una vez descargado lo extraemos.
 9) Una vez extraido nos vamos otra vez al cmd y vamos al directorio donde este la carpeta programa que acabamos de extraer(usando cd para movernos entre directorios). 
 10) Una vez dentro de la carpeta programa escribimos el nombre del programa, en este caso programa.py y damos enter.
@@ -31,14 +31,14 @@ INSTRUCCIONES PARA LA INSTALACION DEL PROGRAMA EN LINUX
 12) Cerramos el terminal y lo volvemos a abrir iniciando sesion como root
 13) Ejecuta 'apt-get install python-pip'
 14) Ejecuta 'pip install mysql-connector-python'
-15) Una vez hecho esto nos iremos al github y descargaremos el archivo programa.zip.
+15) Una vez hecho esto nos iremos al github, seleccionaremos la release y descargaremos el archivo programa.zip.
 16) Una vez descargado lo extraemos.
 17) Una vez extraido nos vamos otra vez al terminal y vamos al directorio donde este la carpeta programa que acabamos de extraer(usando cd para movernos entre directorios). 
 18) Una vez dentro de la carpeta programa escribimos 'python3 programa.py' i damos enter.
 
 INSTRUCCIONES PARA LA INSTALACION DE LA WEB
 -------------------------------------------
-1) Nos descargamos el archivo web.zip 
+1) Nos descargamos el archivo web.zip en la release.
 2) Lo extraemos.
 3) Abrimos el Visual Studio(se puede instalar aqui: https://code.visualstudio.com/download).
 4) Una vez dentro seleccionamos 'Open Folder' y seleccionamos la carpeta web que hemos extraido.

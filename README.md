@@ -50,4 +50,4 @@ INFORMACION DE CONTACTO
 -----------------------
 Desarrollador1: izanvillaecija1@gmail.com
 Desarrollador2: edu.amoros26@gmail.com
-Desarrollador3: id_github: elbarakamohamedgithub
+Desarrollador3: mohamedelaminelbaraka1@gmail.com
